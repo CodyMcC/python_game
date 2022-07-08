@@ -42,7 +42,6 @@ class Server:
         return challenge
 
     def submit(self, q, answer):
-        sleep(.25)
         data = {
             "type": "submit",
             "q": q,
@@ -51,7 +50,10 @@ class Server:
         }
         self.output(f"Submitting: {answer} for Q{q}")
         r = requests.post(self.url, headers=self.aws_header, json=data)
-        self.output(f'{answer} is {"Correct!" if r.json() else "Incorrect"} for Q{q}')
+        if r.json() is True or r.json() is False:
+            self.output(f'{answer} is {"Correct!" if r.json() else "Incorrect"} for Q{q}')
+        else:
+            self.output(r.json())
 
         return r.json()
 

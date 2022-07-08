@@ -1,17 +1,6 @@
-from aws_requests_auth.aws_auth import AWSRequestsAuth
-import requests
-import json
-import urllib.parse
-from requests.auth import HTTPBasicAuth
 import requests
 from time import sleep
 
-
-# Get question
-# get values
-# submit question
-# {type: get, q: 1, user: cody} -> status, question, data
-# {type: submit, q: 1, user: cody, data: result} -> status, result
 
 class Challenge:
 
@@ -22,7 +11,7 @@ class Challenge:
         self.data = data
 
     def __str__(self):
-        return f"{self.q} {self.data}"
+        return f"{self.q} DATA: {self.data}"
 
 
 class Server:
@@ -43,8 +32,12 @@ class Server:
             "q": q,
             "user": "cody"
         }
-        r = requests.post(api_url, headers=self.aws_header, json=data)
-        challenge = Challenge(r.json().get('q'), r.json().get('data'))
+        r = requests.post(self.url, headers=self.aws_header, json=data)
+        if r.json().get('q') is None and r.json().get('data') is None:
+            challenge = Challenge("Sorry, something went wrong getting "
+                                  "a question from the server", r.json().get('data'))
+        else:
+            challenge = Challenge(r.json().get('q'), r.json().get('data'))
         self.output(f"\n{challenge}")
         return challenge
 
@@ -57,7 +50,7 @@ class Server:
             "data": answer
         }
         self.output(f"Submitting: {answer} for Q{q}")
-        r = requests.post(api_url, headers=self.aws_header, json=data)
+        r = requests.post(self.url, headers=self.aws_header, json=data)
         self.output(f'{answer} is {"Correct!" if r.json() else "Incorrect"} for Q{q}')
 
         return r.json()

@@ -12,6 +12,9 @@ To update, run:
 
 ## Getting Started
 Create a new python file with the following and then get to work!
+
+There is currently 10 questions on the server. 
+
 ```python
 from python_game import Server, Challenge
 

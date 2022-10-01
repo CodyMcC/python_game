@@ -16,12 +16,13 @@ class Challenge:
 
 class Server:
 
-    def __init__(self, url, key, output=True, user='nobody'):
+    def __init__(self, url, key, username, output=True):
         self.url = url
         self.api_key = key
         self.aws_header = {'X-API-KEY': self.api_key}
         self.chatty = output
-        self.user = user
+        self.user = username
+        self.clint_version = 1.1
 
     def output(self, *args, **kwargs):
         if self.chatty:
@@ -46,7 +47,7 @@ class Server:
         data = {
             "type": "submit",
             "q": q,
-            "user": "cody",
+            "user": self.user,
             "data": answer
         }
         self.output(f"Submitting: {answer} for Q{q}")

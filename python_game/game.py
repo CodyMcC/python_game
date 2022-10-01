@@ -16,11 +16,12 @@ class Challenge:
 
 class Server:
 
-    def __init__(self, url, key, output=True):
+    def __init__(self, url, key, output=True, user='nobody'):
         self.url = url
         self.api_key = key
         self.aws_header = {'X-API-KEY': self.api_key}
         self.chatty = output
+        self.user = user
 
     def output(self, *args, **kwargs):
         if self.chatty:
@@ -30,7 +31,7 @@ class Server:
         data = {
             "type": "get",
             "q": q,
-            "user": "cody"
+            "user": self.user
         }
         r = requests.post(self.url, headers=self.aws_header, json=data)
         if r.json().get('q') is None and r.json().get('data') is None:

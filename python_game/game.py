@@ -50,10 +50,10 @@ class Server:
             "user": self.user,
             "data": answer
         }
-        self.output(f"Submitting: {answer} for Q{q}")
+        self.output(f"Q{q}: Submitting: {answer}")
         r = requests.post(self.url, headers=self.aws_header, json=data)
         if r.json() is True or r.json() is False:
-            self.output(f'{answer} is {"Correct!" if r.json() else "Incorrect"} for Q{q}')
+            self.output(f'Q{q}: {"Correct!" if r.json() else "Incorrect"} {answer}')
         else:
             self.output(r.json())
 

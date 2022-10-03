@@ -4,11 +4,12 @@ from time import sleep
 
 class Challenge:
 
-    def __init__(self, prompt, data):
+    def __init__(self, prompt, data, additional_data=None):
         self.prompt = prompt
         self.q = prompt
         self.question = prompt
         self.data = data
+        self.additional_data = additional_data
 
     def __str__(self):
         return f"{self.q} DATA: {self.data}"
@@ -39,7 +40,7 @@ class Server:
             challenge = Challenge("Sorry, something went wrong getting "
                                   "a question from the server", r.json().get('data'))
         else:
-            challenge = Challenge(r.json().get('q'), r.json().get('data'))
+            challenge = Challenge(r.json().get('q'), r.json().get('data'), additional_data=r.json().get('additional_data'))
         self.output(f"\n{challenge}")
         return challenge
 
